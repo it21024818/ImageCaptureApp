@@ -3,11 +3,12 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 // import { Camera } from 'react-native-vision-camera';
-import { RNCamera } from 'react-native-camera';
+// import { RNCamera } from 'react-native-camera';
 import * as FileSystem from 'expo-file-system';
 import { Audio } from 'expo-av';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Device } from 'expo-device';
+import { Camera, CameraType } from 'expo-camera';
 
 const API_URL = 'https://your-api-endpoint'; // Replace with your API endpoint
 
@@ -15,6 +16,8 @@ export default function App() {
   const [language, setLanguage] = useState(''); 
   const [isRecording, setIsRecording] = useState(false);
   const cameraRef = useRef(null); 
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
 
   const handleLanguageChange = (selectedLanguage) => {
     setLanguage(selectedLanguage);
@@ -88,10 +91,10 @@ export default function App() {
       />
       <Button title="Start" onPress={startRecording} />
       <Button title="Stop" onPress={stopRecording} />
-      <RNCamera
+      <Camera
         ref={cameraRef}
         style={{ width: 200, height: 200 }}
-        type={RNCamera.Constants.Type.back}
+        type={type}
       />
       <StatusBar style="auto" />
     </View>
